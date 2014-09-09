@@ -19,7 +19,7 @@ public class CharacterGenerator : MonoBehaviour
 		// Use this for initialization
 		void Start ()
 		{
-	
+			// Modify this function to add characters into free rooms
 		}
 	
 		// Update is called once per frame
