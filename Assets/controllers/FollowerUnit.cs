@@ -68,16 +68,10 @@ public class FollowerUnit : MonoBehaviour
 				if ((s = GetComponent<VelocityMatch> ()) != null)
 						s.enabled = false;
 				if ((s = GetComponent<Separation> ()) != null)
-						s.enabled = false;
+						s.enabled = true;
 				if ((s = GetComponent<Seek> ()) != null)
 						s.enabled = false;
-				if ((pf1 = GetComponent<PFArrive> ()) != null &&
-						(pf2 = _leader.GetComponent<PFArrive> ()) != null) {
-						pf1.PathfinderHost = pf2.PathfinderHost;
-						pf1.Start(); //reset the steering to register the pathfinder
-						pf1.enabled = true;
-
-				}
+				if ((s = GetComponent<PFArrive> ()) != null) s.enabled = true;
 
 				_caughtUp = false;
 		}
@@ -108,4 +102,12 @@ public class FollowerUnit : MonoBehaviour
 						}						
 				}
 		}			
+
+		void OnDestroy()
+		{
+			if (_leader == null) return;
+			PlayerUnit player = _leader.GetComponent<PlayerUnit> ();
+			if (player != null)
+				player.RemoveFromFlock (this);
+		}
 }

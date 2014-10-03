@@ -41,8 +41,11 @@ public class Movement : MonoBehaviour
 						}
 				}
 
-				_linearSteering /= count;
-				_angularSteering /= count;
+				if (count > 0) {
+						_linearSteering /= count;
+						_angularSteering /= count;
+				}
+			
 				_linearSteering = Helpers.CapVector3 (_linearSteering * dt, MaxLinearAcceleration);
 				_angularSteering = Helpers.CapFloat (_angularSteering * dt, MaxAngularAcceleration);
 		}

@@ -15,7 +15,18 @@ public class PlayerUnit : MonoBehaviour {
 		HashSet<Transform> flockCopy = new HashSet<Transform>(_flock);
 
 		foreach (Transform unit in _flock) {
-			if (unit == transform) continue;
+			Separation sepSteer = unit.GetComponent<Separation>();
+			if (sepSteer != null) sepSteer.SetTargets(flockCopy);
+		}
+	}
+
+	public void RemoveFromFlock (Component followerUnit)
+	{
+		//HACK repeat three times, refactor, repeat twice, copy
+		_flock.Remove(followerUnit.transform);
+		HashSet<Transform> flockCopy = new HashSet<Transform>(_flock);
+		
+		foreach (Transform unit in _flock) {
 			Separation sepSteer = unit.GetComponent<Separation>();
 			if (sepSteer != null) sepSteer.SetTargets(flockCopy);
 		}
@@ -28,7 +39,6 @@ public class PlayerUnit : MonoBehaviour {
 		{
 			unit.SetLeader(this.transform);
 		}
-		
 	}
 
 }
