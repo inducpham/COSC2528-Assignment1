@@ -4,7 +4,7 @@ using IronScheme;
 
 
 /// <summary>
-/// Example code for training an XOR overation
+/// Example code for training an XOR operation
 /// Might cause a little bit of time for looping 600 times IN U3D.
 ///
 /*
