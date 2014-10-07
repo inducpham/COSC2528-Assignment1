@@ -30,7 +30,7 @@ public class CharacterGenerator : MonoBehaviour
 						Destroy (o);
 				foreach (GameObject o in GameObject.FindGameObjectsWithTag("Enemy"))
 						Destroy (o);
-				// Modify this function to add characters into free rooms
+			// Modify this function to add characters into free rooms
 				// Shuffle the freeroom list
 				ShuffleRooms ();
 

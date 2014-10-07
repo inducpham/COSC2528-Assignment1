@@ -25,6 +25,7 @@ public class EnemyUnit : MonoBehaviour
 		// Use this for initialization
 		void Start ()
 		{
+		Debug.Log(IronScheme.RuntimeExtensions.Eval("(+ 1 {0})",3).ToString());
 				_home = transform.position;
 				_pathfinder = GetComponent<PFArrive> ();
 				_patrolDelta = Random.Range (0f, PatrolMaxUpdateInterval);

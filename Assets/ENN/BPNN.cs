@@ -79,7 +79,6 @@ public class BPNN : NN {
 	/// <param name="inputs">Inputs.</param>
 	public void Train(object[] targets, object[] inputs)
 	{
-
 		//Debug.Log (IronScheme.RuntimeExtensions.Eval("(cadr (vector->list {0}))",(object)inputs).ToString());
 		if(inputs.Length != _n_in)
 			Debug.LogError("BPNN.Train: targets length doesn't match nn outputs");

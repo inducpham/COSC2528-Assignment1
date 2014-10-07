@@ -5,14 +5,10 @@ using System.Collections.Generic;
 public class PFArrive : Arrive {
 	
 	public Transform PathfinderHost = null;
-	public float NodeArriveRadius = 1f;
+	public float NodeArriveRadius = 0.2f;
 	public bool PrintPFDebug = false;
 	private PathfindingMap pathfinder = null;
 	private LinkedList<Vector3> path = null;
-
-	/* CAVEAT: make sure to set node arrive radius to be about greater than 1,
-	 * otherwise arrive function would not be able to progress in the case of
-	 * NodeArriveRadius < 0.2f for example */
 
 	new public void Start() {
 		base.Start();
