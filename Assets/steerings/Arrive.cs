@@ -16,7 +16,9 @@ public class Arrive : Steering
 				SteeringOutput output = new SteeringOutput ();
 
 				// Get the direction to the target
-				Vector3 direction = GetTargetPoint() - transform.position;
+				Vector3 direction = GetTargetPoint () - transform.position;
+				// Since the context is 2d, set direction.y to be 0
+				direction.y = 0;
 				Vector3 targetVelocity;
 				float distance = direction.magnitude;
 				float targetSpeed = 0f;
@@ -43,5 +45,16 @@ public class Arrive : Steering
 				output.linear /= TimeToTarget;
 				
 				return output;
+		}
+
+		public override Vector3 GetTargetPoint ()
+		{
+				if (TargetIsPoint) {
+						return TargetPoint;
+				} else if (TargetTransform != null) {
+						return TargetTransform.position;
+				} else {
+						return TargetPoint;
+				}
 		}
 }

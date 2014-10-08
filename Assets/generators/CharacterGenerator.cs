@@ -30,7 +30,7 @@ public class CharacterGenerator : MonoBehaviour
 						Destroy (o);
 				foreach (GameObject o in GameObject.FindGameObjectsWithTag("Enemy"))
 						Destroy (o);
-			// Modify this function to add characters into free rooms
+				// Modify this function to add characters into free rooms
 				// Shuffle the freeroom list
 				ShuffleRooms ();
 
@@ -39,12 +39,25 @@ public class CharacterGenerator : MonoBehaviour
 				int enemiesCount = rooms.Count - 1 - followerCount;
 				int index = 0;
 
-				AddToRoom (PlayerPrefab, rooms [index++], "player");
+				GameObject player = null;
+				player = AddToRoom (PlayerPrefab, rooms [index++], "player");
 				for (int i = 0; i < followerCount; i++)
 						AddToRoom (FollowerPrefab, rooms [index++], "follower");
 				for (int i = 0; i < enemiesCount; i++)
 						AddToRoom (EnemyPrefab, rooms [index++], "enemy");
 				//Done adding game objects
+
+				//Focus the game camera on the player
+				Camera c = Camera.main;
+
+				if (player != null && c.GetComponent<Arrive> () != null) {
+						c.GetComponent<Arrive> ().SetTargetPosition (player.transform);
+						Vector3 cp = c.transform.position;
+						Vector3 pp = player.transform.position;
+						cp.x = pp.x;
+						cp.z = pp.z;
+						c.transform.position = cp;
+				}
 		}
 	
 		// Update is called once per frame
@@ -83,10 +96,10 @@ public class CharacterGenerator : MonoBehaviour
 				}
 		}
 
-		private void AddToRoom (GameObject prefab, Vector4 v, string name)
+		private GameObject AddToRoom (GameObject prefab, Vector4 v, string name)
 		{
 				if (prefab == null)
-						return;
+						return null;
 				Vector3 position = new Vector3 (v.x + v.z / 2, 0.5f, v.y + v.w / 2);
 
 				GameObject o = Instantiate (prefab, position, Quaternion.identity) as GameObject;
@@ -99,5 +112,7 @@ public class CharacterGenerator : MonoBehaviour
 						pathfinder.PathfinderHost = PathfinderHost;
 						pathfinder.Start ();
 				}
+
+				return o;
 		}
 }

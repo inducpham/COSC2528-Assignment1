@@ -62,6 +62,7 @@ public class Movement : MonoBehaviour
 				UpdateSteering (Time.deltaTime);
 
 				Vector3 v = rigidbody.velocity;
+
 				v += _linearSteering;
 				v.y = 0;
 				rigidbody.velocity = Helpers.CapVector3 (v, MaxVelocity);
