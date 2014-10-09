@@ -10,6 +10,7 @@ public class CharacterGenerator : MonoBehaviour
 		public GameObject PlayerPrefab = null;
 		public GameObject FollowerPrefab = null;
 		public GameObject EnemyPrefab = null;
+		public GameObject TextPrefab = null;
 
 		public void AddFreeRoom (Vector4 room)
 		{
@@ -40,11 +41,11 @@ public class CharacterGenerator : MonoBehaviour
 				int index = 0;
 
 				GameObject player = null;
-				player = AddToRoom (PlayerPrefab, rooms [index++], "player");
+				player = AddUnitToRoom (PlayerPrefab, rooms [index++], "player");
 				for (int i = 0; i < followerCount; i++)
-						AddToRoom (FollowerPrefab, rooms [index++], "follower");
+						AddUnitToRoom (FollowerPrefab, rooms [index++], "follower");
 				for (int i = 0; i < enemiesCount; i++)
-						AddToRoom (EnemyPrefab, rooms [index++], "enemy");
+						AddUnitToRoom (EnemyPrefab, rooms [index++], "enemy");
 				//Done adding game objects
 
 				//Focus the game camera on the player
@@ -96,7 +97,7 @@ public class CharacterGenerator : MonoBehaviour
 				}
 		}
 
-		private GameObject AddToRoom (GameObject prefab, Vector4 v, string name)
+		private GameObject AddUnitToRoom (GameObject prefab, Vector4 v, string name)
 		{
 				if (prefab == null)
 						return null;
@@ -111,6 +112,13 @@ public class CharacterGenerator : MonoBehaviour
 				if (pathfinder != null && PathfinderHost != null) {
 						pathfinder.PathfinderHost = PathfinderHost;
 						pathfinder.Start ();
+				}
+
+				//Add the unit displayer
+				if (TextPrefab) {
+					GameObject text = Instantiate (TextPrefab, position, Quaternion.identity) as GameObject;
+					UnitDisplayer d = text.GetComponent<UnitDisplayer>();
+					if (d != null) d.target = o.transform;
 				}
 
 				return o;
