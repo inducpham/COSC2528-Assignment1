@@ -7,6 +7,8 @@ enum State
 		Chasing }
 ;
 
+[RequireComponent (typeof(Combat))]
+
 public class EnemyUnit : MonoBehaviour
 {
 		public float ChaseRadius = 10f;
@@ -21,11 +23,12 @@ public class EnemyUnit : MonoBehaviour
 		private PFArrive _pathfinder;
 		private Transform _chaseTarget;
 		private State _state;
+		public GameObject Player = null;
 
 		// Use this for initialization
 		void Start ()
 		{
-		Debug.Log(IronScheme.RuntimeExtensions.Eval("(+ 1 {0})",3).ToString());
+				Debug.Log (IronScheme.RuntimeExtensions.Eval ("(+ 1 {0})", 3).ToString ());
 				_home = transform.position;
 				_pathfinder = GetComponent<PFArrive> ();
 				_patrolDelta = Random.Range (0f, PatrolMaxUpdateInterval);
@@ -69,13 +72,22 @@ public class EnemyUnit : MonoBehaviour
 
 		void OnCollisionEnter (Collision collision)
 		{
+				TryAttack (collision);
+		}
+
+		void OnCollisionStay (Collision collision)
+		{
+				TryAttack (collision);
+		}
+
+		private void TryAttack (Collision collision)
+		{
 				FollowerUnit unit = collision.gameObject.GetComponent<FollowerUnit> ();
+
+				if (unit == null)
+						return;
 		
-				if (unit != null) { //HACK destroy the target unit
-						Debug.Log ("Collision!");
-						Destroy (unit.gameObject);
-				}
-		
+				GetComponent<Combat> ().Attack (unit.gameObject);
 		}
 	
 		// Update is called once per frame
@@ -144,4 +156,17 @@ public class EnemyUnit : MonoBehaviour
 				if (_pathfinder != null)
 						_pathfinder.SetTargetPoint (destination);
 		}
+
+		void OnDestroy()
+		{
+			if (Player == null) return;
+
+			PlayerUnit player = Player.GetComponent<PlayerUnit>();
+
+			if (player == null) return;
+
+			player.NeutralizeThreat(gameObject);
+		}
+
+
 }

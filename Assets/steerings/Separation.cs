@@ -7,21 +7,21 @@ public class Separation : Steering {
 	public float MaxAcceleration = 15f;
 	public float DecayCoefficient = 0.3f;
 	public float MaxPredictionTime = 0.5f;
-	private HashSet<Transform> _targets = new HashSet<Transform>();
+	private HashSet<GameObject> _targets = new HashSet<GameObject>();
 
-	public void SetTargets(HashSet<Transform> targets)
+	public void SetTargets(HashSet<GameObject> targets)
 	{
-		_targets = new HashSet<Transform>(targets);
-		_targets.Remove (transform);
+		_targets = new HashSet<GameObject>(targets);
+		_targets.Remove (gameObject);
 	}
 
 	public override SteeringOutput GetSteering ()
 	{
 		SteeringOutput output = new SteeringOutput();
 
-		foreach (Transform target in _targets)
+		foreach (GameObject target in _targets)
 		{
-			Vector3 direction = target.position - transform.position;
+			Vector3 direction = target.transform.position - transform.position;
 			float distance = direction.magnitude;
 
 			if (distance < Threshold)

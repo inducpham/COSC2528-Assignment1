@@ -41,11 +41,16 @@ public class CharacterGenerator : MonoBehaviour
 				int index = 0;
 
 				GameObject player = null;
+				EnemyUnit enemyU = null;
 				player = AddUnitToRoom (PlayerPrefab, rooms [index++], "player");
 				for (int i = 0; i < followerCount; i++)
 						AddUnitToRoom (FollowerPrefab, rooms [index++], "follower");
-				for (int i = 0; i < enemiesCount; i++)
-						AddUnitToRoom (EnemyPrefab, rooms [index++], "enemy");
+				for (int i = 0; i < enemiesCount; i++) {
+						enemyU = AddUnitToRoom (EnemyPrefab, rooms [index++], "enemy")
+									.GetComponent<EnemyUnit>();
+						//this section is very important, it allows the threat to neutralize itself
+						if (enemyU != null) enemyU.Player = player;
+				}
 				//Done adding game objects
 
 				//Focus the game camera on the player
