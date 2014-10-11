@@ -28,8 +28,7 @@ public class HealingArea : MonoBehaviour
 								if ((r = o.GetComponent<Combat> ()) != null)
 										r.Heal (b);
 						}
-			
-						Debug.Log (_contactRecord.Count);
+
 						_contactRecord.Clear ();
 				}
 		}

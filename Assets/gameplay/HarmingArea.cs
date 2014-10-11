@@ -38,4 +38,9 @@ public class HarmingArea : MonoBehaviour {
 	{
 		_contactRecord.Add(collision.gameObject);
 	}
+	
+	void OnCollisionExit (Collision collision)
+	{
+		_contactRecord.Remove(collision.gameObject);
+	}
 }
