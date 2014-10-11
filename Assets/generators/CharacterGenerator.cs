@@ -11,6 +11,8 @@ public class CharacterGenerator : MonoBehaviour
 		public GameObject FollowerPrefab = null;
 		public GameObject EnemyPrefab = null;
 		public GameObject TextPrefab = null;
+		public GameObject HealingRoomPrefab = null;
+		public GameObject HarmingRoomPrefab = null;
 
 		public void AddFreeRoom (Vector4 room)
 		{
@@ -31,13 +33,23 @@ public class CharacterGenerator : MonoBehaviour
 						Destroy (o);
 				foreach (GameObject o in GameObject.FindGameObjectsWithTag("Enemy"))
 						Destroy (o);
+				foreach (GameObject o in GameObject.FindGameObjectsWithTag("Pane"))
+						Destroy (o);
 				// Modify this function to add characters into free rooms
 				// Shuffle the freeroom list
 				ShuffleRooms ();
 
+				int count = rooms.Count;
+				int paneCount = count / 5;
+				count -= paneCount;
+
+				// Let 1/10 be the healing / harming;
+				int healingPaneCount = paneCount / 2;
+				int harmingPaneCount = paneCount - healingPaneCount;
+				
 				// Get the number of rooms for player, follower and enemies
-				int followerCount = (rooms.Count - 1) / 2;
-				int enemiesCount = rooms.Count - 1 - followerCount;
+				int followerCount = (count - 1) / 2;
+				int enemiesCount = count - 1 - followerCount;
 				int index = 0;
 
 				GameObject player = null;
@@ -47,11 +59,16 @@ public class CharacterGenerator : MonoBehaviour
 						AddUnitToRoom (FollowerPrefab, rooms [index++], "follower");
 				for (int i = 0; i < enemiesCount; i++) {
 						enemyU = AddUnitToRoom (EnemyPrefab, rooms [index++], "enemy")
-									.GetComponent<EnemyUnit>();
+									.GetComponent<EnemyUnit> ();
 						//this section is very important, it allows the threat to neutralize itself
-						if (enemyU != null) enemyU.Player = player;
+						if (enemyU != null)
+								enemyU.Player = player;
 				}
-				//Done adding game objects
+				//Apply healing/harming pane
+				for (int i = 0; i < healingPaneCount; i++)
+						AddPaneToRoom (HealingRoomPrefab, rooms [index++]);
+				for (int i = 0; i < harmingPaneCount; i++)
+						AddPaneToRoom (HarmingRoomPrefab, rooms [index++]);
 
 				//Focus the game camera on the player
 				Camera c = Camera.main;
@@ -102,11 +119,31 @@ public class CharacterGenerator : MonoBehaviour
 				}
 		}
 
+		private GameObject AddPaneToRoom (GameObject prefab, Vector4 v)
+		{
+				if (prefab == null)
+						return null;
+
+				GameObject p = Instantiate (prefab) as GameObject;
+				Vector3 position = p.transform.position;
+				Vector3 scale = p.transform.localScale;
+				position.x = v.x + v.z / 2;
+				position.y = 0.01f;
+				position.z = v.y + v.w / 2;
+				scale.x *= v.z;
+				scale.z *= v.w;
+				p.transform.position = position;
+				p.transform.localScale = scale;
+				p.transform.rotation = Quaternion.identity;
+
+				return p;
+		}
+
 		private GameObject AddUnitToRoom (GameObject prefab, Vector4 v, string name)
 		{
 				if (prefab == null)
 						return null;
-				Vector3 position = new Vector3 (v.x + v.z / 2, 0.5f, v.y + v.w / 2);
+				Vector3 position = new Vector3 (v.x + v.z / 2, 1f, v.y + v.w / 2);
 
 				GameObject o = Instantiate (prefab, position, Quaternion.identity) as GameObject;
 				o.name = name;
@@ -121,9 +158,10 @@ public class CharacterGenerator : MonoBehaviour
 
 				//Add the unit displayer
 				if (TextPrefab) {
-					GameObject text = Instantiate (TextPrefab, position, Quaternion.identity) as GameObject;
-					UnitDisplayer d = text.GetComponent<UnitDisplayer>();
-					if (d != null) d.target = o.transform;
+						GameObject text = Instantiate (TextPrefab, position, Quaternion.identity) as GameObject;
+						UnitDisplayer d = text.GetComponent<UnitDisplayer> ();
+						if (d != null)
+								d.target = o.transform;
 				}
 
 				return o;
