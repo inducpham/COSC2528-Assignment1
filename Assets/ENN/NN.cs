@@ -7,10 +7,14 @@ using IronScheme;
 /// NN n = new NN(4,3,2);
 /// float out[] = n.Sim(1,2,3,4);
 /// </summary>
-public class NN   {
+public class NN : IronSchemeGlobalDefine  {
 	protected object _nn;
 	protected int _n_in=0;
 	protected int _n_out=0;
+	public object NNet{
+		get{return _nn;}
+		set{ _nn = value;}
+	}
 	static NN()
 	{
 		IronScheme.RuntimeExtensions.Eval (@"

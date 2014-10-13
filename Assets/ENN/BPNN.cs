@@ -4,7 +4,7 @@ using IronScheme;
 
 
 /// <summary>
-/// Example code for training an XOR operation
+/// Example code for training an XOR overation
 /// Might cause a little bit of time for looping 600 times IN U3D.
 ///
 /*
@@ -79,6 +79,7 @@ public class BPNN : NN {
 	/// <param name="inputs">Inputs.</param>
 	public void Train(object[] targets, object[] inputs)
 	{
+
 		//Debug.Log (IronScheme.RuntimeExtensions.Eval("(cadr (vector->list {0}))",(object)inputs).ToString());
 		if(inputs.Length != _n_in)
 			Debug.LogError("BPNN.Train: targets length doesn't match nn outputs");
